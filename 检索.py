@@ -7,10 +7,6 @@ csv_path = './规范条目合并_最终.csv'
 images_path = '.'  # Images are directly in the root directory
 terms_path = './术语.csv'
 
-# Debug: Check if the files are in the current directory
-st.write("Current Working Directory:", os.getcwd())
-st.write("Files in Current Directory:", os.listdir(os.getcwd()))
-
 # Load data
 try:
     df = pd.read_csv(csv_path, encoding='utf-8-sig')
