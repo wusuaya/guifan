@@ -24,26 +24,34 @@ st.title("建筑防火通用规范+GB55037-2022")
 # Step 1: Select a large item (A column) with its corresponding B column info
 df['A_with_info'] = df['A'].astype(str) + ' - ' + df['B'].astype(str).str.slice(0, 20)
 level1_options = df['A_with_info'].dropna().unique()
-selected_level1_display = st.sidebar.selectbox('', level1_options)
-selected_level1 = selected_level1_display.split(' - ')[0]  # Extract only the item number
+selected_level1_display = st.sidebar.selectbox('', level1_options, key='level1')
+selected_level1 = selected_level1_display.split(' - ')[0] if selected_level1_display else None  # Extract only the item number
 
 # Filter by the selected large item
-df_level1 = df[df['A'] == selected_level1]
+df_level1 = df[df['A'] == selected_level1] if selected_level1 else pd.DataFrame()
 
 # Step 2: Select a middle item (C column) with its corresponding D column info
-df_level1['C_with_info'] = df_level1['C'].astype(str) + ' - ' + df_level1['D'].astype(str).str.slice(0, 20)
-level2_options = df_level1['C_with_info'].dropna().unique()
-selected_level2_display = st.sidebar.selectbox('', level2_options)
-selected_level2 = selected_level2_display.split(' - ')[0]  # Extract only the item number
+if not df_level1.empty:
+    df_level1['C_with_info'] = df_level1['C'].astype(str) + ' - ' + df_level1['D'].astype(str).str.slice(0, 20)
+    level2_options = df_level1['C_with_info'].dropna().unique()
+else:
+    level2_options = []
+
+selected_level2_display = st.sidebar.selectbox('', level2_options, key='level2')
+selected_level2 = selected_level2_display.split(' - ')[0] if selected_level2_display else None  # Extract only the item number
 
 # Filter by the selected middle item
-df_level2 = df_level1[df_level1['C'] == selected_level2]
+df_level2 = df_level1[df_level1['C'] == selected_level2] if selected_level2 else pd.DataFrame()
 
 # Step 3: Select a small item (E column) with its corresponding content
-df_level2['E_with_info'] = df_level2['E'].astype(str) + ' - ' + df_level2['F'].astype(str).str.slice(0, 20)
-level3_options = df_level2['E_with_info'].dropna().unique()
-selected_level3_display = st.sidebar.selectbox('', level3_options)
-selected_level3 = selected_level3_display.split(' - ')[0]  # Extract only the item number
+if not df_level2.empty:
+    df_level2['E_with_info'] = df_level2['E'].astype(str) + ' - ' + df_level2['F'].astype(str).str.slice(0, 20)
+    level3_options = df_level2['E_with_info'].dropna().unique()
+else:
+    level3_options = []
+
+selected_level3_display = st.sidebar.selectbox('', level3_options, key='level3')
+selected_level3 = selected_level3_display.split(' - ')[0] if selected_level3_display else None  # Extract only the item number
 
 # Show the details of the selected small item
 if selected_level3:
@@ -98,3 +106,4 @@ if selected_level3:
         </style>
         <div class="watermark">MA内测版</div>
     """, unsafe_allow_html=True)
+
